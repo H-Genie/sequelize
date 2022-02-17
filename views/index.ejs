@@ -1,0 +1,50 @@
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Sequelize</title>
+    </head>
+    <body>
+        <div style="display: flex">
+            <form method="post" action="comment" autocomplete="off">
+                <label>ToDo</label>
+                <input type="text" placeholder="할 일을 입력해주세요" name="todo" required />
+                <button>작성</button>
+            </form>
+        </div>
+
+        <% for(let i=0; i < todos.length; i++) { %>
+        <div style="display: flex; align-items: center">
+            <p><%= todos[i].todo %></p>
+            <button onclick="editTodo('<%= todos[i].id %>','<%= todos[i].todo %>')">수정</button>
+            <button onclick="deleteTodo('<%= todos[i].id %>')">삭제</button>
+        </div>
+        <% } %>
+
+        <script>
+            const editTodo = (id, todo) => {
+                const editInput = prompt("메세지를 입력해주세요", todo);
+                if (editInput === todo) return alert("메세지를 수정해주세요");
+
+                const form = document.createElement("form");
+                let obj;
+                obj = document.createElement("input");
+                obj.setAttribute("type", "hidden");
+                obj.setAttribute("name", "todo");
+                obj.setAttribute("value", editInput);
+
+                form.appendChild(obj);
+                form.setAttribute("method", "post");
+                form.setAttribute("action", `/comment/edit/${id}`);
+                document.body.appendChild(form);
+                form.submit();
+            };
+
+            const deleteTodo = (id) => {
+                const ok = confirm("삭제하시겠습니까?");
+                if (ok) location.href = `/comment/delete/${id}`;
+            };
+        </script>
+    </body>
+</html>
